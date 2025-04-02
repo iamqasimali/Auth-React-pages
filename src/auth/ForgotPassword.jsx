@@ -1,0 +1,81 @@
+// Desc: Forgot Password Page
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { IoChevronBackOutline } from "react-icons/io5";
+
+import authDark from "../../assets/image/auth3-dark.webp";
+import authLight from "../../assets/image/auth3-light.webp";
+import { useTheme } from "../../hooks/useTheme";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
+import VerifyOtp from "./VerifyOtp";
+import ResetPassword from "./ResetPassword";
+import { useAlert } from "@/context/AlertContext";
+import Alert from "@/widgets/alerts/Alert";
+
+const ForgotPassword = () => {
+  const [flag, setFlag] = useState(1);
+  const [email, setEmail] = useState("");
+  const { theme, toggleTheme } = useTheme();
+  const { alert, hideAlert } = useAlert();
+  return (
+    <div
+      className={`flex justify-center flex-col flex-1 w-full overflow-y-auto no-scrollbar min-h-screen ${
+        theme == "dark" ? "dark" : ""
+      }`}
+      style={{
+        backgroundImage: `url(${theme == "dark" ? authDark : authLight})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      {/* <div className="mx-4 sm:mx-auto w-full max-w-md mb-5 sm:pt-10">
+        <Link
+          to="/"
+          className="inline-flex items-center text-sm text-gray-500 transition-colors hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+        >
+          <IoChevronBackOutline className="size-5" />
+          Back to dashboard
+        </Link>
+      </div> */}
+
+      {alert.show && (
+        <Alert
+          variant={alert.variant}
+          title={alert.title}
+          message={alert.message}
+          showLink={true}
+          linkHref={alert.linkHref}
+          linkText={alert.linkText}
+        />
+      )}
+
+      {flag === 1 && (
+        <ForgotPasswordForm
+          flag={flag}
+          setFlag={setFlag}
+          email={email}
+          setEmail={setEmail}
+        />
+      )}
+      {flag === 2 && (
+        <VerifyOtp
+          flag={flag}
+          setFlag={setFlag}
+          email={email}
+          setEmail={setEmail}
+          from="resetPassword"
+        />
+      )}
+      {flag === 3 && (
+        <ResetPassword
+          flag={flag}
+          setFlag={setFlag}
+          email={email}
+          setEmail={setEmail}
+        />
+      )}
+    </div>
+  );
+};
+
+export default ForgotPassword;
